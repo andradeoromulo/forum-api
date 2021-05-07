@@ -8,6 +8,8 @@ import br.com.alura.forumapi.model.Topico;
 import br.com.alura.forumapi.repository.CursoRepository;
 import br.com.alura.forumapi.repository.TopicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,9 +36,10 @@ public class TopicosController {
     private CursoRepository cursoRepository;
 
     @GetMapping
+    @Cacheable(value = "listaTopicos")
     public Page<TopicoDTO> lista(
             @RequestParam(required = false) String nomeCurso,
-            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable paginacao) {
+            @PageableDefault(page = 0, size = 10, sort = "dataCriacao", direction = Sort.Direction.DESC) Pageable paginacao) {
 
         Page<Topico> topicos = null;
 
@@ -51,6 +54,7 @@ public class TopicosController {
 
     @PostMapping
     @Transactional
+    @CacheEvict(value = "listaTopicos", allEntries = true)
     public ResponseEntity<TopicoDTO> cadastrar(@RequestBody @Valid TopicoForm topicoForm, UriComponentsBuilder uriBuilder) {
 
         Topico topico = topicoForm.converter(cursoRepository);
@@ -75,6 +79,7 @@ public class TopicosController {
 
     @PutMapping("/{topicoId}")
     @Transactional
+    @CacheEvict(value = "listaTopicos", allEntries = true)
     public ResponseEntity<TopicoDTO> atualizar(@PathVariable Long topicoId, @RequestBody AtualizaTopicoForm topicoForm) {
 
         Optional<Topico> optional = topicoRepository.findById(topicoId);
@@ -90,6 +95,7 @@ public class TopicosController {
 
     @DeleteMapping("/{topicoId}")
     @Transactional
+    @CacheEvict(value = "listaTopicos", allEntries = true)
     public ResponseEntity<?> remover(@PathVariable Long topicoId) {
 
         Optional<Topico> optional = topicoRepository.findById(topicoId);
