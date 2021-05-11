@@ -4,6 +4,7 @@ import br.com.alura.forumapi.config.security.TokenService;
 import br.com.alura.forumapi.controller.dto.TokenDTO;
 import br.com.alura.forumapi.controller.form.AutenticacaoForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
+@Profile("prd")
 public class AutenticacaoController {
 
     @Autowired
