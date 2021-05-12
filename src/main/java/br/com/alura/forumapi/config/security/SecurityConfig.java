@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @Configuration
-@Profile("prd")
+@Profile(value = {"prd", "test"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
